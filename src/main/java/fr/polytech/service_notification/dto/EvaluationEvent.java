@@ -6,7 +6,10 @@ public class EvaluationEvent {
     private String target;
     private String message;
 
-    // Getters et Setters
+
+    /**
+     * Getters and Setters
+     */
     public String getEvaluationType() { return evaluationType; }
     public void setEvaluationType(String evaluationType) { this.evaluationType = evaluationType; }
 

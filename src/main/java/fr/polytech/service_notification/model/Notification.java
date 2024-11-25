@@ -15,7 +15,9 @@ public class Notification {
     private Long recipientId;
     private boolean read;
 
-    // Getters et Setters
+    /**
+     * Getters and Setters
+     */
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
