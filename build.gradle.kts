@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.3.5"
 	id("io.spring.dependency-management") version "1.1.6"
+	id("jacoco")
 }
 
 group = "fr.polytech"
@@ -9,6 +10,24 @@ version = "0.0.1-SNAPSHOT"
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+jacoco {
+	toolVersion = "0.8.12"
+}
+
+tasks.test {
+	useJUnitPlatform()
+	finalizedBy("jacocoTestReport") // Génère un rapport après les tests
+}
+
+tasks.jacocoTestReport {
+	dependsOn(tasks.test) // S'assurer que les tests sont exécutés avant le rapport
+	reports {
+		xml.required.set(true) // Générer un rapport XML (utile pour CI/CD ou SonarQube)
+		html.required.set(true) // Générer un rapport HTML pour une analyse locale
+		html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml")) // Chemin du rapport HTML
 	}
 }
 

@@ -26,9 +26,14 @@ jobs:
       # Exécute les tests
       - name: Run Tests
         run: |
-          ./gradlew clean test # Commande pour exécuter les tests avec Gradle
+          ./gradlew clean test jacocoTestReport
         env:
           CI: true # Indique que les tests sont exécutés dans un environnement CI
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-coverage
+          path: build/jacocoHtml
 
   # Job 2 : Build and Push Docker Image
   build-and-push:
