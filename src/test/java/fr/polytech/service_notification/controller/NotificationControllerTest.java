@@ -48,7 +48,7 @@ class NotificationControllerTest {
     void testGetAllNotifications() throws Exception {
         when(service.findAll()).thenReturn(Collections.singletonList(notification));
 
-        mockMvc.perform(get("/notifications"))
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].message").value("Test message"));
@@ -58,7 +58,7 @@ class NotificationControllerTest {
     void testGetNotificationById() throws Exception {
         when(service.findById(1L)).thenReturn(notification);
 
-        mockMvc.perform(get("/notifications/1"))
+        mockMvc.perform(get("/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Test message"))
                 .andExpect(jsonPath("$.recipient").value(2L));
@@ -68,7 +68,7 @@ class NotificationControllerTest {
     void testGetNotificationByRecipientId() throws Exception {
         when(service.findByRecipientId(2L)).thenReturn(notification);
 
-        mockMvc.perform(get("/notifications/recipient/2"))
+        mockMvc.perform(get("/recipient/2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Test message"));
     }
@@ -77,7 +77,7 @@ class NotificationControllerTest {
     void testCreateNotification() throws Exception {
         when(service.save(any(Notification.class))).thenReturn(notification);
 
-        mockMvc.perform(post("/notifications")
+        mockMvc.perform(post("/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(notification)))
                 .andExpect(status().isOk())
@@ -89,7 +89,7 @@ class NotificationControllerTest {
     void testDeleteNotification() throws Exception {
         Mockito.doNothing().when(service).delete(1L);
 
-        mockMvc.perform(delete("/notifications/1"))
+        mockMvc.perform(delete("/1"))
                 .andExpect(status().isOk());
     }
 }
