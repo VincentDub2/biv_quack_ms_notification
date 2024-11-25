@@ -14,6 +14,7 @@ public class KafkaConsumer {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
     NotificationService notificationService;
 
     @KafkaListener(topics = "evaluation-notifications", groupId = "notification-group")
