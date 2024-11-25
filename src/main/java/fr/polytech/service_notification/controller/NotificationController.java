@@ -73,4 +73,15 @@ public class NotificationController {
     public void deleteNotification(@PathVariable Long id) {
         service.delete(id);
     }
+
+    /**
+     * Mark a notification as read.
+     * @param id The ID of the notification to mark as read.
+     */
+    @PutMapping("/{id}/read")
+    public void markAsRead(@PathVariable Long id) {
+        Notification notification = service.findById(id);
+        notification.setRead(true);
+        service.update(notification);
+    }
 }
