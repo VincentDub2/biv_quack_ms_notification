@@ -2,6 +2,8 @@ package fr.polytech.service_notification.controller;
 
 import fr.polytech.service_notification.model.Notification;
 import fr.polytech.service_notification.service.NotificationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +12,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/")
 public class NotificationController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(NotificationController.class);
 
     @Autowired
     private NotificationService service;
