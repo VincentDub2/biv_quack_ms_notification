@@ -37,6 +37,7 @@ public class KafkaConsumer {
         try {
             EvaluationEvent event = objectMapper.readValue(message, EvaluationEvent.class);
             UserResponse voyageur = userClient.getUserById(event.getVoyageurId());
+            LOGGER.info("Notification reçue : {}", event.toString());
             EmplacementResponse emplacement = emplacementClient.getEmplacementById(event.getEmplacementId());
 
             Notification evaluationNotification = new Notification();
@@ -58,6 +59,12 @@ public class KafkaConsumer {
     public void listenReservationNotifications(String message) {
         try {
             ReservationEvent event = objectMapper.readValue(message, ReservationEvent.class);
+            LOGGER.info("Notification reçue : {}", event.toString());
+            if (event.getVoyageurId() == null) {
+                LOGGER.info("Id du voyageur nul: {}", event.getEmplacementId());
+                return;
+
+            }
             UserResponse voyeur = userClient.getUserById(event.getVoyageurId());
             EmplacementResponse emplacement = emplacementClient.getEmplacementById(event.getEmplacementId());
             UserResponse hote = userClient.getUserById(emplacement.getIdHote());

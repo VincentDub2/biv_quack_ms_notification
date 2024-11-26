@@ -46,4 +46,15 @@ public class ReservationEvent {
 
     public boolean getIsCancelled() { return isCancelled; }
     public void setIsCancelled(boolean isCancelled) { this.isCancelled = isCancelled;}
+
+    public String toString() {
+        return "ReservationEvent{" +
+                "voyageurId=" + voyageurId +
+                ", emplacementId=" + emplacementId +
+                ", dateArrive=" + dateArrive +
+                ", dateDepart=" + dateDepart +
+                ", error=" + error +
+                ", isCancelled=" + isCancelled +
+                '}';
+    }
 }
