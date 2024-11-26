@@ -44,7 +44,7 @@ public class NotificationService {
      * @param recipientId The recipient ID.
      * @return The found notification.
      */
-    public Notification findByRecipientId(Long recipientId) {
+    public List<Notification> findByRecipientId(Long recipientId) {
         return repository.findByRecipientId(recipientId);
     }
 

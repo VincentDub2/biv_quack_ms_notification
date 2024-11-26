@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,14 +106,14 @@ class NotificationServiceTest {
         notification.setRecipient(123L);
         notification.setMessage("Test FindByRecipientId");
 
-        when(repository.findByRecipientId(123L)).thenReturn(notification);
+        when(repository.findByRecipientId(123L)).thenReturn(Collections.singletonList(notification));
 
         // Appel de la méthode
-        Notification foundNotification = service.findByRecipientId(123L);
+        List<Notification> foundNotification = service.findByRecipientId(123L);
 
         // Vérifications
         assertThat(foundNotification).isNotNull();
-        assertThat(foundNotification.getRecipient()).isEqualTo(123L);
+        assertThat(foundNotification.getFirst().getRecipient()).isEqualTo(123L);
         verify(repository, times(1)).findByRecipientId(123L);
     }
 

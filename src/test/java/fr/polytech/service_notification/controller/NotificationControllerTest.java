@@ -66,11 +66,14 @@ class NotificationControllerTest {
 
     @Test
     void testGetNotificationByRecipientId() throws Exception {
-        when(service.findByRecipientId(2L)).thenReturn(notification);
 
+        when(service.findByRecipientId(2L)).thenReturn(Collections.singletonList(notification));
+
+        //This mothode return a list of notification
         mockMvc.perform(get("/recipient/2"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Test message"));
+                .andExpect(status().isOk()).andExpect(jsonPath("$.size()").value(1))
+                        .andExpect(jsonPath("$[0].message").value("Test message"));
+
     }
 
     @Test

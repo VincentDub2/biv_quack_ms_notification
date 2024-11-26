@@ -3,12 +3,17 @@ package fr.polytech.service_notification.repository;
 import fr.polytech.service_notification.model.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     /**
-     * Find a notification by its recipient ID.
-     * @param recipientId The recipient ID.
-     * @return The found notification.
+     * Trouve toutes les notifications pour un utilisateur donné.
+     * @param recipientId L'ID du destinataire.
+     * @return Une liste de notifications.
      */
-    Notification findByRecipientId(Long recipientId);
+    List<Notification> findByRecipientId(Long recipientId);
+
+
+
 
 }

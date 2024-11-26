@@ -39,7 +39,7 @@ public class NotificationController {
      * @return The found notification.
      */
     @GetMapping("/recipient/{recipientId}")
-    public Notification getNotificationByRecipientId(@PathVariable Long recipientId) {
+    public List<Notification> getNotificationByRecipientId(@PathVariable Long recipientId) {
         return service.findByRecipientId(recipientId);
     }
 
