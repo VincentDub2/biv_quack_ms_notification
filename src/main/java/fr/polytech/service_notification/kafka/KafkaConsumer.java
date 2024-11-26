@@ -36,14 +36,17 @@ public class KafkaConsumer {
     public void listenEvaluationNotifications(String message) {
         try {
             EvaluationEvent event = objectMapper.readValue(message, EvaluationEvent.class);
-            System.out.println("Notification enrichie reçue : " + event.getMessage());
+            UserResponse voyageur = userClient.getUserById(event.getVoyageurId());
+            EmplacementResponse emplacement = emplacementClient.getEmplacementById(event.getEmplacementId());
 
-            Notification notification = new Notification();
-            notification.setRecipient(event.getUserId());
-            notification.setMessage(event.getMessage());
-            notification.setRead(false);
+            Notification evaluationNotification = new Notification();
+            evaluationNotification.setRecipient(emplacement.getIdHote());
+            evaluationNotification.setMessage(
+                    "Nouvelle évaluation de " + voyageur.getUsername() + " pour votre emplacement " + emplacement.getNom() + " : " + event.getNote() + "/5"
+            );
+            evaluationNotification.setRead(false);
 
-            notificationService.save(notification);
+            notificationService.save(evaluationNotification);
 
 
         } catch (Exception e) {
