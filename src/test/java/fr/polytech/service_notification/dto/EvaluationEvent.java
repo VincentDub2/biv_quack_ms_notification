@@ -11,16 +11,23 @@ class EvaluationEventTest {
         EvaluationEvent event = new EvaluationEvent();
 
         // Test des setters
-        event.setEvaluationType("Performance");
-        event.setUserId(123L);
-        event.setTarget(2L);
-        event.setMessage("Great work on the project!");
+        event.setCommentaire("Great work on the project!");
+        event.setEmplacementId(123L);
+        event.setHoteId(2L);
+        event.setId(1L);
+        event.setNote(5);
+        event.setReservationId(456L);
+        event.setVoyageurId(789L);
 
         // Test des getters avec AssertJ
-        assertThat(event.getEvaluationType()).isEqualTo("Performance");
-        assertThat(event.getUserId()).isEqualTo(123L);
-        assertThat(event.getTarget()).isEqualTo(2L);
-        assertThat(event.getMessage()).isEqualTo("Great work on the project!");
+        assertThat(event.getId()).isEqualTo(1L);
+        assertThat(event.getHoteId()).isEqualTo(2L);
+        assertThat(event.getVoyageurId()).isEqualTo(789L);
+        assertThat(event.getReservationId()).isEqualTo(456L);
+        assertThat(event.getEmplacementId()).isEqualTo(123L);
+        assertThat(event.getNote()).isEqualTo(5);
+        assertThat(event.getCommentaire()).isEqualTo("Great work on the project!");
+
     }
 
     @Test
@@ -29,26 +36,35 @@ class EvaluationEventTest {
         EvaluationEvent event = new EvaluationEvent();
 
         // Vérification des valeurs par défaut
-        assertThat(event.getEvaluationType()).isNull();
-        assertThat(event.getUserId()).isNull();
-        assertThat(event.getTarget()).isNull();
-        assertThat(event.getMessage()).isNull();
+        assertThat(event.getId()).isNull();
+        assertThat(event.getHoteId()).isNull();
+        assertThat(event.getVoyageurId()).isNull();
+        assertThat(event.getReservationId()).isNull();
+        assertThat(event.getEmplacementId()).isNull();
+        assertThat(event.getNote()).isZero();
+        assertThat(event.getCommentaire()).isNull();
     }
 
     @Test
     void testEquality() {
         // Création de deux instances avec les mêmes valeurs
         EvaluationEvent event1 = new EvaluationEvent();
-        event1.setEvaluationType("Feedback");
-        event1.setUserId(456L);
-        event1.setTarget(2L);
-        event1.setMessage("Needs improvement");
+        event1.setCommentaire("Great work on the project!");
+        event1.setEmplacementId(123L);
+        event1.setHoteId(2L);
+        event1.setId(1L);
+        event1.setNote(5);
+        event1.setReservationId(456L);
+        event1.setVoyageurId(789L);
 
         EvaluationEvent event2 = new EvaluationEvent();
-        event2.setEvaluationType("Feedback");
-        event2.setUserId(456L);
-        event2.setTarget(2L);
-        event2.setMessage("Needs improvement");
+        event2.setCommentaire("Great work on the project!");
+        event2.setEmplacementId(123L);
+        event2.setHoteId(2L);
+        event2.setId(1L);
+        event2.setNote(5);
+        event2.setReservationId(456L);
+        event2.setVoyageurId(789L);
 
         // Vérification que les deux instances sont équivalentes
         assertThat(event1)
