@@ -1,7 +1,9 @@
 package fr.polytech.service_notification.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.polytech.service_notification.clients.EmplacementClient;
 import fr.polytech.service_notification.clients.UserClient;
+import fr.polytech.service_notification.dto.EmplacementResponse;
 import fr.polytech.service_notification.dto.EvaluationEvent;
 import fr.polytech.service_notification.dto.ReservationEvent;
 import fr.polytech.service_notification.dto.UserResponse;
@@ -27,6 +29,9 @@ public class KafkaConsumer {
     @Autowired
     private UserClient userClient;
 
+    @Autowired
+    private EmplacementClient emplacementClient;
+
     @KafkaListener(topics = "evaluation-notifications", groupId = "notification-group")
     public void listenEvaluationNotifications(String message) {
         try {
@@ -50,41 +55,59 @@ public class KafkaConsumer {
     public void listenReservationNotifications(String message) {
         try {
             ReservationEvent event = objectMapper.readValue(message, ReservationEvent.class);
-            UserResponse user = userClient.getUserById(event.getVoyageurId());
+            UserResponse voyeur = userClient.getUserById(event.getVoyageurId());
+            EmplacementResponse emplacement = emplacementClient.getEmplacementById(event.getEmplacementId());
+            UserResponse hote = userClient.getUserById(emplacement.getIdHote());
+
 
             LOGGER.info("Notification enrichie reçue : {}", event.getEmplacementId());
-            LOGGER.info("User : {}", user);
 
 
 
             if (event.getError()) {
+
                 Notification notification = new Notification();
                 notification.setRecipient(event.getVoyageurId());
                 notification.setMessage(
-                        "Erreur lors de la réservation de " + event.getEmplacementId() + " : "
+                        "Erreur lors de la réservation de " + emplacement.getNom() + "du " +event.getDateArrive() + " au " + event.getDateDepart()
                 );
                 notification.setRead(false);
 
                 notificationService.save(notification);
 
             } else if (event.getIsCancelled()) {
-                Notification notification = new Notification();
-                notification.setRecipient(event.getVoyageurId());
-                notification.setMessage(
-                        "Réservation de " + event.getEmplacementId() + " annulée"
+                Notification notificationVoyageur = new Notification();
+                notificationVoyageur.setRecipient(event.getVoyageurId());
+                notificationVoyageur.setMessage(
+                        "Réservation de " + emplacement.getNom() + " annulée" + "du " +event.getDateArrive() + " au " + event.getDateDepart()
                 );
-                notification.setRead(false);
+                notificationVoyageur.setRead(false);
 
-                notificationService.save(notification);
+                notificationService.save(notificationVoyageur);
+
+                Notification notificationHote = new Notification();
+                notificationHote.setRecipient(emplacement.getIdHote());
+                notificationHote.setMessage(
+                      voyeur.getUsername() + " a annulé sa réservation de " + emplacement.getNom() + "du " +event.getDateArrive() + " au " + event.getDateDepart()
+                );
             }else {
-                Notification notification = new Notification();
-                notification.setRecipient(event.getVoyageurId());
-                notification.setMessage(
-                        "Réservation de " + event.getEmplacementId() + " effectuée"
+                Notification notificationVoyageur = new Notification();
+                notificationVoyageur.setRecipient(event.getVoyageurId());
+                notificationVoyageur.setMessage(
+                        "Réservation de " + emplacement.getNom() + " confirmée" + "du " +event.getDateArrive() + " au " + event.getDateDepart()
                 );
-                notification.setRead(false);
+                notificationVoyageur.setRead(false);
 
-                notificationService.save(notification);
+                notificationService.save(notificationVoyageur);
+
+                Notification notificationHote = new Notification();
+                notificationHote.setRecipient(emplacement.getIdHote());
+                notificationHote.setMessage(
+                        voyeur.getUsername() + " a réservé votre emplacement " + emplacement.getNom() + "du " +event.getDateArrive() + " au " + event.getDateDepart()
+                );
+                notificationHote.setRead(false);
+
+                notificationService.save(notificationHote);
             }
         } catch (Exception e) {
             e.printStackTrace();
