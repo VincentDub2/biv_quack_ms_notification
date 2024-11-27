@@ -3,10 +3,7 @@ package fr.polytech.service_notification.kafka;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.polytech.service_notification.clients.EmplacementClient;
 import fr.polytech.service_notification.clients.UserClient;
-import fr.polytech.service_notification.dto.EmplacementResponse;
-import fr.polytech.service_notification.dto.EvaluationEvent;
-import fr.polytech.service_notification.dto.ReservationEvent;
-import fr.polytech.service_notification.dto.UserResponse;
+import fr.polytech.service_notification.dto.*;
 import fr.polytech.service_notification.model.Notification;
 import fr.polytech.service_notification.service.NotificationService;
 import org.slf4j.Logger;
@@ -46,6 +43,8 @@ public class KafkaConsumer {
                     "Nouvelle évaluation de " + voyageur.getUsername() + " pour votre emplacement " + emplacement.getNom() + " : " + event.getNote() + "/5"
             );
             evaluationNotification.setRead(false);
+
+
 
             notificationService.save(evaluationNotification);
 
@@ -124,5 +123,25 @@ public class KafkaConsumer {
         }
     }
 
+    @KafkaListener(topics = "message-notifications", groupId = "notification-group")
+    public void listenMessageNotifications(String message) {
+        try {
+            MessageEvent event = objectMapper.readValue(message, MessageEvent.class);
+            LOGGER.info("Notification reçue : {}", event.toString());
+            UserResponse sender = userClient.getUserById(event.getSenderId());
+            UserResponse receiver = userClient.getUserById(event.getReceiverId());
 
+            Notification messageNotification = new Notification();
+            messageNotification.setRecipient(event.getReceiverId());
+            messageNotification.setMessage(
+                    "Nouveau message de " + sender.getUsername()
+
+            );
+            messageNotification.setRead(false);
+
+            notificationService.save(messageNotification);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
