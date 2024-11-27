@@ -78,7 +78,7 @@ public class KafkaConsumer {
                 Notification notification = new Notification();
                 notification.setRecipient(event.getVoyageurId());
                 notification.setMessage(
-                        "Erreur lors de la réservation de " + emplacement.getNom() + "du " +event.getDateArrive() + " au " + event.getDateDepart()
+                        "Erreur lors de la réservation de " + emplacement.getNom() + "du " + event.convertDate(event.getDateArrive()) + " au " + event.convertDate(event.getDateDepart())
                 );
                 notification.setRead(false);
 
@@ -88,7 +88,7 @@ public class KafkaConsumer {
                 Notification notificationVoyageur = new Notification();
                 notificationVoyageur.setRecipient(event.getVoyageurId());
                 notificationVoyageur.setMessage(
-                        "Réservation de " + emplacement.getNom() + " annulée" + "du " +event.getDateArrive() + " au " + event.getDateDepart()
+                        "Réservation de " + emplacement.getNom() + " annulée" + "du " +event.convertDate(event.getDateArrive()) + " au " + event.convertDate(event.getDateDepart())
                 );
                 notificationVoyageur.setRead(false);
 
@@ -97,13 +97,13 @@ public class KafkaConsumer {
                 Notification notificationHote = new Notification();
                 notificationHote.setRecipient(emplacement.getIdHote());
                 notificationHote.setMessage(
-                      voyeur.getUsername() + " a annulé sa réservation de " + emplacement.getNom() + "du " +event.getDateArrive() + " au " + event.getDateDepart()
+                      voyeur.getUsername() + " a annulé sa réservation de " + emplacement.getNom() + "du " +event.convertDate(event.getDateArrive()) + " au " + event.convertDate(event.getDateDepart())
                 );
             }else {
                 Notification notificationVoyageur = new Notification();
                 notificationVoyageur.setRecipient(event.getVoyageurId());
                 notificationVoyageur.setMessage(
-                        "Réservation de " + emplacement.getNom() + " confirmée" + "du " +event.getDateArrive() + " au " + event.getDateDepart()
+                        "Réservation de " + emplacement.getNom() + " confirmée du " +event.convertDate(event.getDateArrive()) + " au " + event.convertDate(event.getDateDepart())
                 );
                 notificationVoyageur.setRead(false);
 
@@ -112,7 +112,7 @@ public class KafkaConsumer {
                 Notification notificationHote = new Notification();
                 notificationHote.setRecipient(emplacement.getIdHote());
                 notificationHote.setMessage(
-                        voyeur.getUsername() + " a réservé votre emplacement " + emplacement.getNom() + "du " +event.getDateArrive() + " au " + event.getDateDepart()
+                        voyeur.getUsername() + " a réservé votre emplacement " + emplacement.getNom() + "du " +event.convertDate(event.getDateArrive()) + " au " + event.convertDate(event.getDateDepart())
                 );
                 notificationHote.setRead(false);
 

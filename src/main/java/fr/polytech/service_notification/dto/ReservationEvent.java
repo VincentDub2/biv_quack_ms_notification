@@ -47,6 +47,29 @@ public class ReservationEvent {
     public boolean getIsCancelled() { return isCancelled; }
     public void setIsCancelled(boolean isCancelled) { this.isCancelled = isCancelled;}
 
+
+    /**
+     * Get the right date format
+     * @return String
+     */
+    //2024-01-01T00:00:00 to 01/01/2024
+    public String convertDate(String date) {
+        String[] dateSplit = date.split("T");
+        String[] dateSplit2 = dateSplit[0].split("-");
+        return dateSplit2[2] + "/" + dateSplit2[1] + "/" + dateSplit2[0];
+    }
+
+    /** LocalDate to String
+     * @param date date
+     * @return String this format  01/01/2024
+     */
+    public String convertDate(LocalDateTime date) {
+        return date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear();
+    }
+
+    /**
+     * toString
+     */
     public String toString() {
         return "ReservationEvent{" +
                 "voyageurId=" + voyageurId +
